@@ -1,0 +1,17 @@
+.component-header {
+  display: flex;
+  height: 4em;
+  background-color: darkslategrey;
+}
+
+.component-header-logoBlock {
+  margin: 1em 1em;
+  align-self: start;
+  height: auto;
+  width: 3em;
+}
+
+.component-header-logoBlock-text {
+  font-size: x-large;
+  color: aliceblue;
+}
