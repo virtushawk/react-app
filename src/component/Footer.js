@@ -1,13 +1,14 @@
+import { Box, Typography } from "@mui/material";
 import React from "react";
-
-import "./Footer.css";
 
 export default class Footer extends React.Component {
   render() {
     return (
-      <div className="component-footer">
-        <span className="component-footer-text">Roman Bruhanchik, 2021</span>
-      </div>
+      <Box sx={{ height: 80, bgcolor: "darkslategray" }}>
+        <Typography variant="h4" color="aliceblue" textAlign="center">
+          Roman Bruhanchik, 2021
+        </Typography>
+      </Box>
     );
   }
 }
