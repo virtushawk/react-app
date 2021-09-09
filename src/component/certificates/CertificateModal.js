@@ -7,7 +7,6 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import { width } from "@mui/system";
 
 export default class CertificateModal extends React.Component {
   constructor(props) {

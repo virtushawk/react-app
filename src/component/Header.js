@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Link, Stack, Typography, Button } from "@mui/material";
-import CertificateModal from "./CertificateModal";
+import { Box, Link, Stack, Typography } from "@mui/material";
+import CertificateModal from "./certificates/CertificateModal";
 
 export default class Header extends React.Component {
   render() {
