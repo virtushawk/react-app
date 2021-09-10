@@ -58,10 +58,18 @@ export default class CertificateTable extends React.Component {
             },
           ]}
           rows={this.state.certificates}
-          pageSize={10}
+          pageSize={this.state.size}
           rowsPerPageOptions={[10, 25, 50]}
           disableSelectionOnClick
           autoHeight
+          onPageSizeChange={(number) => {
+            getCertificates(this.state.page, number).then((values) => {
+              this.setState((state) => ({
+                certificates: values,
+                size: number,
+              }));
+            });
+          }}
         />
       </div>
     );
