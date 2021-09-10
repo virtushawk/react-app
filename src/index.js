@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Header from "./component/Header";
+import Header from "./component/header/Header";
 import Footer from "./component/Footer";
 
 ReactDOM.render(

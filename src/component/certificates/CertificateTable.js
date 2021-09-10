@@ -1,22 +1,47 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import getCertificates from "./getCertificates";
+import { AlertTitle, Alert } from "@mui/material";
+import { Collapse } from "@mui/material";
 
 export default class CertificateTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { page: 0, size: 10, certificates: [] };
+    this.state = {
+      page: 0,
+      size: 10,
+      certificates: [],
+      error: null,
+      flag: true,
+    };
   }
 
   componentDidMount() {
-    getCertificates(this.state.page, this.state.size).then((values) => {
-      this.setState((state) => ({ certificates: values }));
-    });
+    getCertificates(this.state.page, this.state.size)
+      .then((values) => {
+        this.setState((state) => ({ certificates: values, error: null }));
+      })
+      .catch((reason) => {
+        this.setState((state) => ({ error: "not authorized" }));
+      });
   }
 
   render() {
     return (
       <div style={{ width: "100%" }}>
+        {this.state.error != null && (
+          <Collapse in={this.state.flag}>
+            <Alert
+              severity="error"
+              onClose={() => {
+                this.setState((state) => ({ flag: false }));
+              }}
+            >
+              <AlertTitle>Error</AlertTitle>
+              {this.state.error}
+            </Alert>
+          </Collapse>
+        )}
         <DataGrid
           columns={[
             {
