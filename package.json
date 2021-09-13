@@ -15,9 +15,13 @@
     "axios": "^0.21.4",
     "keycloak-js": "^15.0.2",
     "react": "^17.0.2",
+    "react-dnd": "^14.0.3",
+    "react-dnd-html5-backend": "^14.0.1",
     "react-dom": "^17.0.2",
+    "react-material-ui-form-validator": "^2.1.4",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
+    "react-tag-input": "^6.7.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

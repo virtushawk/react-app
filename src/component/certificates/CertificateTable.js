@@ -1,8 +1,10 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import getCertificates from "./getCertificates";
-import { AlertTitle, Alert } from "@mui/material";
+import { AlertTitle, Alert, Button, Stack } from "@mui/material";
 import { Collapse } from "@mui/material";
+import CertificateViewModal from "./CertificateViewModal";
+import CertificateModal from "./CertificateModal";
 
 export default class CertificateTable extends React.Component {
   constructor(props) {
@@ -10,7 +12,7 @@ export default class CertificateTable extends React.Component {
     this.state = {
       page: 0,
       size: 10,
-      certificates: [],
+      certificates: { content: [], totalSize: 0 },
       error: null,
       flag: true,
     };
@@ -78,15 +80,46 @@ export default class CertificateTable extends React.Component {
             },
             {
               field: "actions",
-              headerName: "Actions",
-              width: 150,
+              type: "actions",
+              width: 250,
+              renderCell: (params) => {
+                const onClick = () => {};
+                return (
+                  <Stack direction="row">
+                    <CertificateViewModal certificate={params.row} />
+                    <CertificateModal
+                      buttonText="Edit"
+                      title={`Edit Certificate ${params.row.id}`}
+                      certificate={params.row}
+                    />
+                    <Button color="error" onClick={onClick}>
+                      Delete
+                    </Button>
+                  </Stack>
+                );
+              },
             },
           ]}
-          rows={this.state.certificates}
+          rows={this.state.certificates.content}
           pageSize={this.state.size}
           rowsPerPageOptions={[10, 25, 50]}
           disableSelectionOnClick
           autoHeight
+          paginationMode="server"
+          rowCount={this.state.certificates.totalSize}
+          onPageChange={(newPage) => {
+            getCertificates(newPage, this.state.size)
+              .then((values) => {
+                this.setState((state) => ({
+                  page: newPage,
+                  certificates: values,
+                  error: null,
+                }));
+              })
+              .catch((reason) => {
+                this.setState((state) => ({ error: "not authorized" }));
+              });
+          }}
           onPageSizeChange={(number) => {
             getCertificates(this.state.page, number).then((values) => {
               this.setState((state) => ({
