@@ -1,10 +1,11 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import getCertificates from "./getCertificates";
-import { AlertTitle, Alert, Button, Stack } from "@mui/material";
+import { AlertTitle, Alert, Button, Stack, TextField } from "@mui/material";
 import { Collapse } from "@mui/material";
 import CertificateViewModal from "./CertificateViewModal";
 import CertificateModal from "./CertificateModal";
+import axiosInstance from "../security/requestInterceptor";
 
 export default class CertificateTable extends React.Component {
   constructor(props) {
@@ -15,11 +16,12 @@ export default class CertificateTable extends React.Component {
       certificates: { content: [], totalSize: 0 },
       error: null,
       flag: true,
+      searchValue: "",
     };
   }
 
   componentDidMount() {
-    getCertificates(this.state.page, this.state.size)
+    getCertificates(this.state.page, this.state.size, this.state.searchValue)
       .then((values) => {
         this.setState((state) => ({ certificates: values, error: null }));
       })
@@ -44,6 +46,26 @@ export default class CertificateTable extends React.Component {
             </Alert>
           </Collapse>
         )}
+        <TextField
+          variant="outlined"
+          fullWidth
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              getCertificates(0, this.state.size, this.state.searchValue).then(
+                (values) => {
+                  console.log(values);
+                  this.setState((state) => ({
+                    certificates: values,
+                    error: null,
+                  }));
+                }
+              );
+            }
+          }}
+          onChange={(event) => {
+            this.setState((state) => ({ searchValue: event.target.value }));
+          }}
+        />
         <DataGrid
           columns={[
             {
@@ -83,16 +105,27 @@ export default class CertificateTable extends React.Component {
               type: "actions",
               width: 250,
               renderCell: (params) => {
-                const onClick = () => {};
                 return (
                   <Stack direction="row">
                     <CertificateViewModal certificate={params.row} />
                     <CertificateModal
+                      type="edit"
                       buttonText="Edit"
                       title={`Edit Certificate ${params.row.id}`}
                       certificate={params.row}
                     />
-                    <Button color="error" onClick={onClick}>
+                    <Button
+                      color="error"
+                      onClick={(e) => {
+                        axiosInstance
+                          .delete(
+                            `http://localhost:8080/application/v3/certificates/${params.row.id}`
+                          )
+                          .then((response) => {
+                            window.location.reload();
+                          });
+                      }}
+                    >
                       Delete
                     </Button>
                   </Stack>
@@ -108,7 +141,7 @@ export default class CertificateTable extends React.Component {
           paginationMode="server"
           rowCount={this.state.certificates.totalSize}
           onPageChange={(newPage) => {
-            getCertificates(newPage, this.state.size)
+            getCertificates(newPage, this.state.size, this.state.searchValue)
               .then((values) => {
                 this.setState((state) => ({
                   page: newPage,
@@ -121,7 +154,11 @@ export default class CertificateTable extends React.Component {
               });
           }}
           onPageSizeChange={(number) => {
-            getCertificates(this.state.page, number).then((values) => {
+            getCertificates(
+              this.state.page,
+              number,
+              this.state.searchValue
+            ).then((values) => {
               this.setState((state) => ({
                 certificates: values,
                 size: number,

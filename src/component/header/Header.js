@@ -43,6 +43,7 @@ export default class Header extends React.Component {
             <CertificateModal
               buttonText="Add new"
               title="Add Certificate"
+              type="create"
               //   certificate={{ name: "Hello" }}
             />
           </Stack>

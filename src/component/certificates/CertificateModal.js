@@ -35,6 +35,27 @@ export default class CertificateModal extends React.Component {
     this.handleTagDrag = this.handleTagDrag.bind(this);
   }
 
+  axiosPost(result) {
+    axiosInstance
+      .post("http://localhost:8080/application/v3/certificates", result)
+      .then((response) => {
+        this.setState({ isOpen: false });
+        window.location.reload();
+      });
+  }
+
+  axiosPut(result) {
+    axiosInstance
+      .put(
+        `http://localhost:8080/application/v3/certificates/${this.props.certificate.id}`,
+        result
+      )
+      .then((response) => {
+        this.setState({ isOpen: false });
+        window.location.reload();
+      });
+  }
+
   handleTagDelete(i) {
     const { tags } = this.state;
     this.setState({
@@ -103,15 +124,11 @@ export default class CertificateModal extends React.Component {
                   price: this.state.price,
                   tags: tags,
                 };
-                axiosInstance
-                  .post(
-                    "http://localhost:8080/application/v3/certificates",
-                    result
-                  )
-                  .then((response) => {
-                    this.setState({ isOpen: false });
-                    window.location.reload();
-                  });
+                if (this.props.type === "create") {
+                  this.axiosPost(result);
+                } else {
+                  this.axiosPut(result);
+                }
               }}
             >
               <Stack
