@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Link, Stack, Typography } from "@mui/material";
 import CertificateModal from "../certificates/CertificateModal";
 import Keycloak from "keycloak-js";
+import { useSelector, useDispatch } from "react-redux";
 
 export default class Header extends React.Component {
   constructor(props) {

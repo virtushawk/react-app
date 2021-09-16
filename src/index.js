@@ -6,21 +6,25 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Header from "./component/header/Header";
 import Footer from "./component/Footer";
+import store from "./component/store/store";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Header />
-      <Switch>
-        <Route path="/login">
-          <div>Hello</div>
-        </Route>
-        <Route path="/">
-          <App />
-        </Route>
-      </Switch>
-      <Footer />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <Switch>
+          <Route path="/login">
+            <div>Hello</div>
+          </Route>
+          <Route path="/">
+            <App />
+          </Route>
+        </Switch>
+        <Footer />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
